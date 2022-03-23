@@ -30,7 +30,8 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         new ShootCommand(shooterSubsystem, true, 3)), 
       new ParallelCommandGroup(
         new ShootCommand(shooterSubsystem, true, 3), 
-        new TransportCommand(transportSubsystem, true, 3), 
-        new IntakeCommand(intakeSubsystem, true, 3)));
+        new TransportCommand(transportSubsystem, true, 3) 
+        // new IntakeCommand(intakeSubsystem, true, 3)
+        ));
   }
 }
