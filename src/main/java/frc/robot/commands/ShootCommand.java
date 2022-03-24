@@ -11,13 +11,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootCommand extends CommandBase {
   /** Creates a new ShooterCommand. */
   ShooterSubsystem shooterSubsystem;
-  boolean forward;
+  boolean out;
   double seconds;
   Timer timer;
 
-  public ShootCommand(ShooterSubsystem shooterSubsystem, boolean forward, double seconds) {
+  public ShootCommand(ShooterSubsystem shooterSubsystem, boolean out, double seconds) {
     this.shooterSubsystem = shooterSubsystem;
-    this.forward = forward;
+    this.out = out;
     this.seconds = seconds;
     timer = new Timer();
 
@@ -35,7 +35,7 @@ public class ShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(forward){
+    if(out){
       shooterSubsystem.shoot(1);
     }
     else{

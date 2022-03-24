@@ -11,13 +11,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
   IntakeSubsystem intakeSubsystem;
-  boolean forward;
+  boolean in;
   double seconds;
   Timer timer;
 
-  public IntakeCommand(IntakeSubsystem intakeSubsystem, boolean forward, double seconds) {
+  public IntakeCommand(IntakeSubsystem intakeSubsystem, boolean in, double seconds) {
     this.intakeSubsystem = intakeSubsystem;
-    this.forward = forward;
+    this.in = in;
     this.seconds = seconds;
     timer = new Timer();
 
@@ -35,7 +35,7 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(forward){
+    if(in){
       intakeSubsystem.intake(1);
     }
     else{

@@ -11,13 +11,13 @@ import frc.robot.subsystems.TransportSubsystem;
 public class TransportCommand extends CommandBase {
   /** Creates a new IntakeCommand. */
   TransportSubsystem transportSubsystem;
-  boolean forward;
+  boolean in;
   double seconds;
   Timer timer;
 
-  public TransportCommand(TransportSubsystem transportSubsystem, boolean forward, double seconds) {
+  public TransportCommand(TransportSubsystem transportSubsystem, boolean in, double seconds) {
     this.transportSubsystem = transportSubsystem;
-    this.forward = forward;
+    this.in = in;
     this.seconds = seconds;
     timer = new Timer();
 
@@ -27,7 +27,7 @@ public class TransportCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-public void initialize() {
+  public void initialize() {
     timer.reset();
     timer.start();
   }
@@ -35,7 +35,7 @@ public void initialize() {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(forward){
+    if(in){
       transportSubsystem.transport(-1);
     }
     else{

@@ -10,11 +10,11 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class AngleArmsCommand extends CommandBase {
   /** Creates a new AngleArmsCommand. */
   ElevatorSubsystem elevatorSubsystem;
-  boolean up;
+  boolean forward;
 
-  public AngleArmsCommand(ElevatorSubsystem elevatorSubsystem, boolean up) {
+  public AngleArmsCommand(ElevatorSubsystem elevatorSubsystem, boolean forward) {
     this.elevatorSubsystem = elevatorSubsystem;
-    this.up = up;
+    this.forward = forward;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -26,7 +26,7 @@ public class AngleArmsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(up){
+    if(forward){
       elevatorSubsystem.angleMotorSimple(1);
     } else{
       elevatorSubsystem.angleMotorSimple(-1);

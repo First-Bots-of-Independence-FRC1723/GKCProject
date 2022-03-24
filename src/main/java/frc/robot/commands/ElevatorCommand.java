@@ -10,11 +10,11 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class ElevatorCommand extends CommandBase {
   /** Creates a new ElevatorCommand. */
   private ElevatorSubsystem elevatorSubsystem;
-  private boolean positive;
+  private boolean up;
 
-  public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, boolean positive) {
+  public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, boolean up) {
     this.elevatorSubsystem = elevatorSubsystem;
-    this.positive = positive;
+    this.up = up;
     addRequirements(elevatorSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -28,7 +28,7 @@ public class ElevatorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(positive){
+    if(up){
       elevatorSubsystem.spool(1);
     } else{
       elevatorSubsystem.spool(-1);
