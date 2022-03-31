@@ -28,8 +28,8 @@ public final class Constants {
         public static final int frontLeftLimitSwitchPort = 1;
         public static final int backRightLimitSwitchPort = 2;
         
-        public static final int spoolMotorLeftPort = 17; // robot's left (intake motor)
-        public static final int spoolMotorRightPort = 7;
+        public static final int spoolMotorLeftPort = 17; // robot's left (intake motor side)
+        public static final int spoolMotorRightPort = 8;
         public static final int angleMotorLeftPort = 2;
         public static final int angleMotorRightPort = 6;
 
@@ -46,7 +46,7 @@ public final class Constants {
     }
 
     public static final class Hood{
-        public static final int hoodMotorPort = 8;
+        public static final int hoodMotorPort = 7;
 
         public static final int firstRing = 0;
         public static final int secondRing = 0;
@@ -83,9 +83,9 @@ public final class Constants {
         public static final double openLoopRamp = 0.25;
         public static final double closedLoopRamp = 0.0;
 
-        public static final double driveGearRatio = (6.75 / 1.0); //6.86:1
-        public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
-
+        public static final double driveGearRatio = (6.75 / 1.0);
+        public static final double angleGearRatio = (12.8 / 1.0);
+        
         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
                 new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
                 new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
@@ -140,8 +140,8 @@ public final class Constants {
         public static final class Mod0 {
             public static final int driveMotorID = 19;
             public static final int angleMotorID = 18;
-            public static final int canCoderID = 2;
-            public static final double angleOffset = Robot.mod0Offset.getDouble(0.0);
+            public static final int canCoderID = 4;
+            public static final double angleOffset = 43.4;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -150,8 +150,8 @@ public final class Constants {
         public static final class Mod1 {
             public static final int driveMotorID = 13;
             public static final int angleMotorID = 12;
-            public static final int canCoderID = 1;
-            public static final double angleOffset = Robot.mod1Offset.getDouble(0.0);
+            public static final int canCoderID = 3;
+            public static final double angleOffset = 221.3;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -160,8 +160,8 @@ public final class Constants {
         public static final class Mod2 {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 1;
-            public static final int canCoderID = 3;
-            public static final double angleOffset = Robot.mod2Offset.getDouble(0.0); 
+            public static final int canCoderID = 1;
+            public static final double angleOffset = 85.7; 
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -170,8 +170,8 @@ public final class Constants {
         public static final class Mod3 {
             public static final int driveMotorID = 11;
             public static final int angleMotorID = 10;
-            public static final int canCoderID = 4;
-            public static final double angleOffset = Robot.mod3Offset.getDouble(0.0);
+            public static final int canCoderID = 2;
+            public static final double angleOffset = 47.4;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }      

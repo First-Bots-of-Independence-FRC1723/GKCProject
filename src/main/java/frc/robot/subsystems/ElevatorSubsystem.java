@@ -4,15 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -26,48 +24,54 @@ public class ElevatorSubsystem extends SubsystemBase {
   private VictorSPX spoolMotorRight = new VictorSPX(Constants.Elevator.spoolMotorRightPort);
   private VictorSPX angleMotorLeft = new VictorSPX(Constants.Elevator.angleMotorLeftPort);
   private VictorSPX angleMotorRight = new VictorSPX(Constants.Elevator.angleMotorRightPort);
-  
-  private DoubleSolenoid elevatorSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 10, 11);
-  
-  // private DigitalInput frontRightLimitSwitch = new DigitalInput(Constants.Elevator.frontRightLimitSwitchPort);
-  // private DigitalInput frontLeftLimitSwitch = new DigitalInput(Constants.Elevator.frontLeftLimitSwitchPort);
-  // private DigitalInput backRightLimitSwitch = new DigitalInput(Constants.Elevator.backRightLimitSwitchPort);
 
   private ShuffleboardTab elevatorTab = Shuffleboard.getTab("elevator");
-  private NetworkTableEntry elevatorSpeedEntry = elevatorTab.add("elevator speed", 0.5).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
-  private NetworkTableEntry elevatorAngleSpeedEntry = elevatorTab.add("elevator angle speed", 0.5).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
-  public NetworkTableEntry elevatorExtendTimeEntry = elevatorTab.add("elevator extend time", 0).getEntry();
-  public NetworkTableEntry elevatorRetractTimeEntry = elevatorTab.add("elevator retract time", 0).getEntry();
-  public NetworkTableEntry elevatorAngleTimeEntry = elevatorTab.add("elevator angle time", 0).getEntry();
-  public NetworkTableEntry frontRightLimitSwitchEntry = elevatorTab.add("front right limit switch", false).getEntry();
-  public NetworkTableEntry frontLeftLimitSwitchEntry = elevatorTab.add("front left limit switch", false).getEntry();
-  public NetworkTableEntry backRightLimitSwitchEntry = elevatorTab.add("back right limit switch", false).getEntry();
+  private NetworkTableEntry elevatorSpeedEntry = elevatorTab.add("elevator speed", 0.8)
+  .withWidget(BuiltInWidgets.kNumberSlider)
+  .withProperties(Map.of("min", 0, "max", 1))
+  .getEntry();
+
+  private NetworkTableEntry elevatorAngleSpeedEntry = elevatorTab.add("elevator angle speed", 0.3)
+  .withWidget(BuiltInWidgets.kNumberSlider)
+  .withProperties(Map.of("min", 0, "max", 1))
+  .getEntry();
 
   public ElevatorSubsystem() {
     spoolMotorLeft.setNeutralMode(NeutralMode.Brake);
     spoolMotorRight.setNeutralMode(NeutralMode.Brake);
+    angleMotorLeft.setNeutralMode(NeutralMode.Brake);
+    angleMotorRight.setNeutralMode(NeutralMode.Brake);
   }
 
   public void spool(double multiplier){
     spoolMotorLeft.set(VictorSPXControlMode.PercentOutput, (elevatorSpeedEntry.getDouble(0.0))*(multiplier)*(0.8));
     spoolMotorRight.set(VictorSPXControlMode.PercentOutput, (elevatorSpeedEntry.getDouble(0.0))*(multiplier)*(-0.8));
   }
+
+  public void spoolRight(double multiplier){
+    spoolMotorRight.set(VictorSPXControlMode.PercentOutput, (0.6)*(multiplier)*(0.8));
+  }
+
+  public void spoolLeft(double multiplier){
+    spoolMotorLeft.set(VictorSPXControlMode.PercentOutput, (0.6)*(multiplier)*(-0.8));
+  }
   
   public void togglePistons(){
-    if(elevatorSolenoid.get() == Value.kForward){
+    /* if(elevatorSolenoid.get() == Value.kForward){
       elevatorSolenoid.set(Value.kReverse);
     }
     else{
       elevatorSolenoid.set(Value.kForward);
     }
+    */
   }
 
   public void closeGrabbyGrabby(){
-    elevatorSolenoid.set(Value.kForward);
+    // elevatorSolenoid.set(Value.kForward);
   }
 
   public void openGrabbyGrabby(){
-    elevatorSolenoid.set(Value.kReverse);
+    /// elevatorSolenoid.set(Value.kReverse);
   }
 
   // add back limit switches

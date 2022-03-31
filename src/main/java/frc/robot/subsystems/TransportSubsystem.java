@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,10 +21,16 @@ public class TransportSubsystem extends SubsystemBase {
   private CANSparkMax transportMotor = new CANSparkMax(Constants.Balls.transportMotorPort, MotorType.kBrushless);
 
   private ShuffleboardTab transportTab = Shuffleboard.getTab("transport");
-  private NetworkTableEntry transportSpeedEntry = transportTab.add("transport speed", 0.25).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry transportSpeedEntry = transportTab.add("transport speed", 0.5)
+  .withWidget(BuiltInWidgets.kNumberSlider)
+  .withProperties(Map.of("min", 0, "max", 1))
+  .withSize(9, 3)
+  .withPosition(2, 1)
+  .getEntry();
 
   public TransportSubsystem() {}
 
+  // ~50%
   public void transport(double multiplier){
     transportMotor.set((transportSpeedEntry.getDouble(0.0))*(multiplier)*(0.8));
   }

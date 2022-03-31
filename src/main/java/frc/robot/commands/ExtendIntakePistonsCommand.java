@@ -2,26 +2,28 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ElevatorSequence;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class DLetGo extends InstantCommand {
-  ElevatorSubsystem elevatorSubsystem;
+public class ExtendIntakePistonsCommand extends InstantCommand {
+  IntakeSubsystem intakeSubsystem;
 
-  public DLetGo(ElevatorSubsystem elevatorSubsystem) {
-    this.elevatorSubsystem = elevatorSubsystem;
-    addRequirements(elevatorSubsystem);
+  public ExtendIntakePistonsCommand(IntakeSubsystem intakeSubsystem) {
+    this.intakeSubsystem = intakeSubsystem;
+
+    addRequirements(intakeSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // elevatorSubsystem.openGrabbyGrabby();
+    System.out.println("extend intake pistons");
+    intakeSubsystem.pushPistonsOut();
   }
 }

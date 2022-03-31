@@ -4,31 +4,33 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class ShootCommand extends CommandBase {
-  /** Creates a new ShooterCommand. */
-  ShooterSubsystem shooterSubsystem;
-  boolean out;
-  double seconds;
-  Timer timer;
+public class TurnToAngle extends CommandBase {
+  /** Creates a new TurnToAngle. */
+  DriveSubsystem driveSubsystem;
+  private double angle;
+  private double tolerance;
+  private double seconds;
+  private Timer timer;
 
-  public ShootCommand(ShooterSubsystem shooterSubsystem, boolean out, double seconds) {
-    this.shooterSubsystem = shooterSubsystem;
-    this.out = out;
+  public TurnToAngle(DriveSubsystem driveSubsystem, double angle, double tolerance, double seconds) {
+    this.driveSubsystem = driveSubsystem;
+    this.angle = angle;
+    this.tolerance = tolerance;
     this.seconds = seconds;
     timer = new Timer();
 
-    addRequirements(shooterSubsystem);
+    addRequirements(driveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("shoot command");
     timer.reset();
     timer.start();
   }
@@ -36,18 +38,17 @@ public class ShootCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(out){
-      shooterSubsystem.shoot(-1);
-    }
-    else{
-      shooterSubsystem.shoot(1);
+    if(driveSubsystem.getYaw().getDegrees() <= angle+tolerance && driveSubsystem.getYaw().getDegrees() >= angle){
+      driveSubsystem.drive(new Translation2d(0, 0), 1, false, false);
+    } else if(driveSubsystem.getYaw().getDegrees() >= angle-tolerance && driveSubsystem.getYaw().getDegrees() <= angle){
+      driveSubsystem.drive(new Translation2d(0, 0), -1, false, false);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.shoot(0);
+    driveSubsystem.drive(new Translation2d(0, 0), 0, false, false);
     timer.stop();
     timer.reset();
   }

@@ -9,28 +9,33 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HoodSubsystem;
 
-public class AimCommand extends CommandBase {
-  /** Creates a new AimCommand. */
+public class CombinedDriveCommand extends CommandBase {
+  /** Creates a new CombinedDriveCommand. */
   DriveSubsystem driveSubsystem;
-  HoodSubsystem hoodSubsystem;
-  double seconds;
-  Timer timer;
+  private double rotation;
+  private Translation2d translation;
+  private boolean fieldRelative;
+  private boolean openLoop;
+  private double seconds;
+  private Timer timer;
 
-  public AimCommand(DriveSubsystem driveSubsystem, HoodSubsystem hoodSubsystem, double seconds) {
+  public CombinedDriveCommand(DriveSubsystem driveSubsystem, Translation2d translation, double rotation, boolean fieldRelative, boolean openLoop, double seconds) {
     this.driveSubsystem = driveSubsystem;
-    this.hoodSubsystem = hoodSubsystem;
+    this.translation = translation;
+    this.rotation = rotation;
+    this.fieldRelative = fieldRelative;
+    this.openLoop = openLoop;
     this.seconds = seconds;
     timer = new Timer();
 
-    addRequirements(driveSubsystem, hoodSubsystem);
+    addRequirements(driveSubsystem);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("auto aim");
     timer.reset();
     timer.start();
   }
@@ -38,15 +43,13 @@ public class AimCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d translation = new Translation2d(0, 0).times(Constants.Swerve.maxSpeed);
-    driveSubsystem.drive(translation, hoodSubsystem.tX, false, false);
-
-    // hoodSubsystem.aimHoodWithLimelight();
+    driveSubsystem.drive(translation.times(Constants.Swerve.maxSpeed), rotation*Constants.Swerve.maxAngularVelocity, fieldRelative, openLoop);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveSubsystem.drive(new Translation2d(0, 0), 0, false, false);
     timer.stop();
     timer.reset();
   }
@@ -54,7 +57,7 @@ public class AimCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(seconds > 0){
+if(seconds > 0){
       return timer.get() >= seconds;
     }
     return false;

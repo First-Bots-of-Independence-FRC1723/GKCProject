@@ -28,6 +28,7 @@ public class IntakeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("intake command");
     timer.reset();
     timer.start();
   }

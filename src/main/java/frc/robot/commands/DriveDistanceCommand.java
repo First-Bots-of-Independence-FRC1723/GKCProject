@@ -7,21 +7,26 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.lib.math.Conversions;
+import frc.robot.SwerveModule;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DirectionalDriveCommand extends CommandBase {
-  /** Creates a new AutoDriveCommand. */
-  DriveSubsystem driveSubsystem;
-  Translation2d translation;
-  Timer timer;
-  double seconds;
+public class DriveDistanceCommand extends CommandBase {
+  /** Creates a new DriveDistanceCommand. */
+  private DriveSubsystem driveSubsystem;
+  private Translation2d translation;
+  private double meters;
+  private double cutoffTimeSeconds;
+  private Timer timer;
 
-  public DirectionalDriveCommand(DriveSubsystem driveSubsystem, Translation2d translation, double seconds) {
+  private double averageEncoderCount;
+
+  public DriveDistanceCommand(DriveSubsystem driveSubsystem, Translation2d translation, double meters, double cutoffTimeSeconds) {
     this.driveSubsystem = driveSubsystem;
-    this.seconds = seconds;
+    this.translation = translation;
+    this.meters = meters;
+    this.cutoffTimeSeconds = cutoffTimeSeconds;
     timer = new Timer();
-    this.translation = translation.times(Constants.Swerve.maxSpeed);
 
     addRequirements(driveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,7 +35,10 @@ public class DirectionalDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("directional drive");
+    // resets encoders
+    for(SwerveModule mod : driveSubsystem.mSwerveMods){
+      mod.mDriveMotor.setSelectedSensorPosition(0);
+    }
 
     timer.reset();
     timer.start();
@@ -40,12 +48,18 @@ public class DirectionalDriveCommand extends CommandBase {
   @Override
   public void execute() {
     driveSubsystem.drive(translation, 0, false, false);
+    
+    for(SwerveModule mod : driveSubsystem.mSwerveMods){
+      averageEncoderCount += mod.getDriveMotorEncoder();
+    }  
+    averageEncoderCount /= 4;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     driveSubsystem.drive(new Translation2d(0, 0), 0, false, false);
+
     timer.stop();
     timer.reset();
   }
@@ -53,9 +67,10 @@ public class DirectionalDriveCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(seconds > 0){
-      return timer.get() >= seconds;
+        ////////// conversions in frc\lib\math\Conversions might low key be wrong, specifically gear ratio stuff
+    if(timer.get() > 0){
+      return Conversions.falconToMeters(averageEncoderCount) >= meters || timer.get() >= cutoffTimeSeconds;
     }
-    return false;
+    return Conversions.falconToMeters(averageEncoderCount) >= meters;
   }
 }

@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,15 +31,14 @@ public class Robot extends TimedRobot {
   private static NetworkTableEntry elevatorUp;
   private static NetworkTableEntry elevatorDown;
   private static NetworkTableEntry autoAim;
-  private static NetworkTableEntry evevatorPighstiouxne; 
   private static NetworkTableEntry outtake;
   private static NetworkTableEntry angleArmsForward;
   private static NetworkTableEntry angleArmsBackward;
+  private static NetworkTableEntry spoolRight;
+  private static NetworkTableEntry spoolLeft;
 
-  public static NetworkTableEntry mod0Offset;
-  public static NetworkTableEntry mod1Offset;
-  public static NetworkTableEntry mod2Offset;
-  public static NetworkTableEntry mod3Offset;
+  private static ShuffleboardTab autoTab;
+  public static NetworkTableEntry autoNumber;
 
   private Command m_autonomousCommand;
 
@@ -54,8 +52,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
     bindTab = Shuffleboard.getTab("button binds");
-    addSwerveEntries();
-    addBindEntries();
+    autoTab = Shuffleboard.getTab("auto");
+    addEntries();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -74,7 +72,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    setBindEntries();
+    setEntries();
     CommandScheduler.getInstance().run();
   }
 
@@ -132,47 +130,45 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
-
-  private void addSwerveEntries(){
-    mod0Offset = DriveSubsystem.swerveTab.add("mod0Offset", 46.9).getEntry();
-    mod1Offset = DriveSubsystem.swerveTab.add("mod1Offset", 87.7).getEntry();
-    mod2Offset = DriveSubsystem.swerveTab.add("mod2Offset", 229.1).getEntry();
-    mod3Offset = DriveSubsystem.swerveTab.add("mod3Offset", 169).getEntry();
-  }
   
-  private void addBindEntries(){
+  private void addEntries(){
     intake = bindTab.add("intake", "x").getEntry();
     intakePistons = bindTab.add("intake pistons", "left stick button").getEntry();
-    transport = bindTab.add("transport", "y").getEntry();
+    transport = bindTab.add("transport", "b").getEntry();
     shoot = bindTab.add("shoot", "a").getEntry();
     angleHoodUp = bindTab.add("angle hood up", "left bumper").getEntry();
     angleHoodDown = bindTab.add("angle hood down", "right bumper").getEntry();
-    autoAim = bindTab.add("auto aim" , "b").getEntry();
+    autoAim = bindTab.add("auto aim" , "y").getEntry();
     outtake = bindTab.add("outtake", "back").getEntry();
 
-    elevatorUp = bindTab.add("elevator up" , "start").getEntry();
-    elevatorDown = bindTab.add("elevator down", "back").getEntry();
+    elevatorUp = bindTab.add("elevator up" , "back").getEntry();
+    elevatorDown = bindTab.add("elevator down", "start").getEntry();
     angleArmsForward = bindTab.add("angle arms forward", "left bumper").getEntry();
     angleArmsBackward = bindTab.add("angle arms backward", "right bumper").getEntry();
-    evevatorPighstiouxne = bindTab.add("evevator piston", "").getEntry();
+    spoolLeft = bindTab.add("spool left", "x").getEntry();
+    spoolRight = bindTab.add("spool right", "b").getEntry();
+
+    ////// 
+
+    autoNumber = autoTab.add("auto number", -1).getEntry();
   }
 
-  private void setBindEntries(){
+  private void setEntries(){
     intake.setString("x");
     intakePistons.setString("left stick button");
-    transport.setString("y");
+    transport.setString("b");
     shoot.setString("a");
     angleHoodUp.setString("left bumper");
     angleHoodDown.setString("right bumper");
-    autoAim.setString("b");
+    autoAim.setString("y");
     outtake.setString("back");
 
-    elevatorDown.setString("back");
-    elevatorUp.setString("start");
+    elevatorDown.setString("start");
+    elevatorUp.setString("back");
     angleArmsForward.setString("left bumper");
     angleArmsBackward.setString("right bumper");
-    evevatorPighstiouxne.setString("a");
-    
+    spoolLeft.setString("x");
+    spoolRight.setString("b");
   }
 }
 

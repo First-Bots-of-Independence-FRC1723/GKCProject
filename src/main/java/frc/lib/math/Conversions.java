@@ -1,5 +1,7 @@
 package frc.lib.math;
 
+import frc.robot.Constants;
+
 public class Conversions {
 
     /**
@@ -67,4 +69,24 @@ public class Conversions {
         return wheelVelocity;
     }
 
+    // FIX THESE TWO AND USE IN THE DRIVE DISTANCE COMMAND
+    /**
+     * @param meters Distance in meters that the wheel has traveled
+     * @return Falcon encoder counts
+     */
+    public static double metersToFalcon(double meters){
+        double wheelRotations = meters/Constants.Swerve.wheelCircumference;
+        double motorRotations = wheelRotations/Constants.Swerve.driveGearRatio;
+        return motorRotations*2048;
+    }
+
+    /**
+     * @param falconCounts Falcon encoder counts
+     * @return Distance in meters that the wheel has traveled
+     */
+    public static double falconToMeters(double falconCounts){
+        double motorRotations = falconCounts/2048;
+        double wheelRotations = motorRotations*Constants.Swerve.driveGearRatio;
+        return wheelRotations*Constants.Swerve.wheelCircumference;
+    }
 }

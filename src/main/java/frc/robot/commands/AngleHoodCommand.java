@@ -21,16 +21,19 @@ public class AngleHoodCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("angle hood");
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(up){
-      hoodSubsystem.angleHood(-1);
+      hoodSubsystem.angleHood(1);
     }
     else{
-      hoodSubsystem.angleHood(1);
+      hoodSubsystem.angleHood(-1);
     }
   }
 

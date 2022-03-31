@@ -16,8 +16,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 public class SwerveModule {
     public int moduleNumber;
     private double angleOffset;
-    private TalonFX mAngleMotor;
-    private TalonFX mDriveMotor;
+    public TalonFX mAngleMotor;
+    public TalonFX mDriveMotor;
     private CANCoder angleEncoder;
     private double lastAngle;
 
@@ -85,10 +85,10 @@ public class SwerveModule {
         mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
         mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
         mDriveMotor.setSelectedSensorPosition(0);
-        mDriveMotor.configPeakOutputForward(0.5);
-        mDriveMotor.configPeakOutputReverse(-0.5);
+        mDriveMotor.configPeakOutputForward(0.9);
+        mDriveMotor.configPeakOutputReverse(-0.9);
     }
-
+    
     public Rotation2d getCanCoder(){
         return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
     }
@@ -126,6 +126,10 @@ public class SwerveModule {
     public void goCentimeters(double cm){
         goRotations(cm/(10.16*Math.PI));
     } 
+
+    public double getDriveMotorEncoder(){
+        return mDriveMotor.getSelectedSensorPosition();
+    }
 
     public boolean isInMotion(){
         if(mDriveMotor.getSelectedSensorVelocity() < 1){

@@ -4,21 +4,21 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommandGroup;
-import frc.robot.commands.AimCommand;
+import frc.robot.commands.SetIntakePistonsNeutral;
 import frc.robot.commands.AngleArmsCommand;
-import frc.robot.commands.AngleHoodCommand;
 import frc.robot.commands.AutoCommandGroup;
-import frc.robot.commands.DirectionalDriveCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.ToggleElevatorPistonsCommand;
+import frc.robot.commands.SpoolLeftCommand;
+import frc.robot.commands.SpoolRightCommand;
 import frc.robot.commands.ToggleIntakePistonsCommand;
 import frc.robot.commands.TransportCommand;
 import frc.robot.commands.VariableShooterCommand;
@@ -45,6 +45,10 @@ public class RobotContainer {
   private final int verticalAxis = XboxController.Axis.kLeftY.value;
   private final int horizontalAxis = XboxController.Axis.kLeftX.value;
   private final int rotationalAxis = XboxController.Axis.kRightX.value;
+  private final int rightTriggerAxis = XboxController.Axis.kRightTrigger.value;
+  private final int leftTriggerAxis = XboxController.Axis.kLeftTrigger.value;
+
+  private final Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
@@ -56,9 +60,10 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+    compressor.enableDigital();
     boolean fieldRelative = false;
     boolean openLoop = false;
-    driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driveController, verticalAxis, horizontalAxis, rotationalAxis, fieldRelative, openLoop));
+    driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driveController, verticalAxis, horizontalAxis, rotationalAxis, rightTriggerAxis, leftTriggerAxis, fieldRelative, openLoop));
     shooterSubsystem.setDefaultCommand(new VariableShooterCommand(shooterSubsystem, systemsController));
     configureButtonBindings();
   }
@@ -74,16 +79,23 @@ public class RobotContainer {
     new JoystickButton(driveController, Button.kBack.value).whenHeld(new ElevatorCommand(elevatorSubsystem, false));
     new JoystickButton(driveController, Button.kLeftBumper.value).whenHeld(new AngleArmsCommand(elevatorSubsystem, true));
     new JoystickButton(driveController, Button.kRightBumper.value).whenHeld(new AngleArmsCommand(elevatorSubsystem, false));
-    new JoystickButton(driveController, Button.kA.value).whenHeld(new ToggleElevatorPistonsCommand(elevatorSubsystem));
-    new JoystickButton(driveController, Button.kX.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(0, 0.7), 0));
+    new JoystickButton(driveController, Button.kB.value).whenHeld(new SpoolRightCommand(elevatorSubsystem, false));
+    new JoystickButton(driveController, Button.kX.value).whenHeld(new SpoolLeftCommand(elevatorSubsystem, false));
+    /* 
+    new JoystickButton(driveController, Button.kY.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(0.15, 0), 0));
+    new JoystickButton(driveController, Button.kB.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(0, 0.15), 0));
+    new JoystickButton(driveController, Button.kA.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(-0.15, 0), 0));
+    new JoystickButton(driveController, Button.kX.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(0, -0.15), 0));
+    new JoystickButton(driveController, Button.kRightBumper.value).whenHeld(new RotationalDriveCommand(driveSubsystem, 0.3, 0));
+    new JoystickButton(driveController, Button.kLeftBumper.value).whenHeld(new RotationalDriveCommand(driveSubsystem, -0.3, 0));
+    */
 
     new JoystickButton(systemsController, Button.kLeftStick.value).whenHeld(new ToggleIntakePistonsCommand(intakeSubsystem));
+    new JoystickButton(systemsController, Button.kRightStick.value).whenHeld(new SetIntakePistonsNeutral(intakeSubsystem));
     new JoystickButton(systemsController, Button.kX.value).whenHeld(new IntakeCommand(intakeSubsystem, true, 0));
-    new JoystickButton(systemsController, Button.kY.value).whenHeld(new TransportCommand(transportSubsystem, true, 0));
-    new JoystickButton(systemsController, Button.kB.value).whenHeld(new AimCommand(driveSubsystem, hoodSubsystem, 0));
+    new JoystickButton(systemsController, Button.kB.value).whenHeld(new TransportCommand(transportSubsystem, true, 0));
+    // new JoystickButton(systemsController, Button.kY.value).whenHeld(new AimCommand(driveSubsystem, hoodSubsystem, 0));
     new JoystickButton(systemsController, Button.kA.value).whenHeld(new ShootCommand(shooterSubsystem, true, 0));
-    new JoystickButton(systemsController, Button.kLeftBumper.value).whenHeld(new AngleHoodCommand(hoodSubsystem, false));
-    new JoystickButton(systemsController, Button.kRightBumper.value).whenHeld(new AngleHoodCommand(hoodSubsystem, true));
     new JoystickButton(systemsController, Button.kBack.value).whenHeld(new OuttakeCommandGroup(shooterSubsystem, transportSubsystem, intakeSubsystem));
   }
 

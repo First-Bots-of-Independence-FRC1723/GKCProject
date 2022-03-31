@@ -2,38 +2,49 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ElevatorSequence;
+package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class FExtendArmAgain extends CommandBase {
-  ElevatorSubsystem elevatorSubsystem;
+public class RotationalDriveCommand extends CommandBase {
+  /** Creates a new AutoDriveCommand. */
+  DriveSubsystem driveSubsystem;
+  double rotation;
   Timer timer;
-  /** Creates a new FExtendArmAgain. */
-  public FExtendArmAgain(ElevatorSubsystem elevatorSubsystem) {
-    this.elevatorSubsystem = elevatorSubsystem;
-    addRequirements(elevatorSubsystem);
+  double seconds;
+
+  public RotationalDriveCommand(DriveSubsystem driveSubsystem, double rotation, double seconds) {
+    this.driveSubsystem = driveSubsystem;
+    this.seconds = seconds;
     timer = new Timer();
+    this.rotation = rotation;
+
+    addRequirements(driveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("directional drive");
+
+    timer.reset();
     timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // elevatorSubsystem.spool(0.54372);
+    driveSubsystem.drive(new Translation2d(0, 0), rotation, false, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    driveSubsystem.drive(new Translation2d(0, 0), 0, false, false);
     timer.stop();
     timer.reset();
   }
@@ -41,6 +52,9 @@ public class FExtendArmAgain extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (timer.get() >= elevatorSubsystem.elevatorExtendTimeEntry.getDouble(0.0));
+    if(seconds > 0){
+      return timer.get() >= seconds;
+    }
+    return false;
   }
 }

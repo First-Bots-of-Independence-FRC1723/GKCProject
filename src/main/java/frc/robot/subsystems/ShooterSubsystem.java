@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -20,10 +22,16 @@ public class ShooterSubsystem extends SubsystemBase {
   private CANSparkMax shooterMotorTwo = new CANSparkMax(Constants.Balls.rightShooterMotorPort, MotorType.kBrushless);
 
   private ShuffleboardTab shooterTab = Shuffleboard.getTab("shooter");
-  private NetworkTableEntry shooterSpeedEntry = shooterTab.add("shooter speed", 0.5).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry shooterSpeedEntry = shooterTab.add("shooter speed", 0.29)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0, "max", 1))
+    .withSize(9, 3)
+    .withPosition(2, 1)
+    .getEntry();
 
   public ShooterSubsystem() {}
 
+  // 28% for low from right on the thing
   public void shoot(double multiplier){
     shooterMotorOne.set((shooterSpeedEntry.getDouble(0.0))*(multiplier)*(0.8));
     shooterMotorTwo.set((shooterSpeedEntry.getDouble(0.0))*(multiplier)*(-0.8));

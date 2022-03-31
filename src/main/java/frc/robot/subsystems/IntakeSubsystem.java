@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,19 +23,24 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   private CANSparkMax intakeMotor = new CANSparkMax(Constants.Balls.intakeMotorPort, MotorType.kBrushless);
 
-  private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+  private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 1);
 
   private ShuffleboardTab intakeTab = Shuffleboard.getTab("intake");
-  private NetworkTableEntry intakeSpeedEntry = intakeTab.add("intake speed", 0.2).withWidget(BuiltInWidgets.kNumberSlider).getEntry();
+  private NetworkTableEntry intakeSpeedEntry = intakeTab.add("intake speed", 0.45)
+  .withWidget(BuiltInWidgets.kNumberSlider)
+  .withProperties(Map.of("min", 0, "max", 1))
+  .withSize(9, 3)
+  .withPosition(2, 1)
+  .getEntry();
   
   public IntakeSubsystem() {}
 
+  // 40-50%
   public void intake(double multiplier){
     //if(intakeSolenoid.get() == Value.kForward){
       intakeMotor.set((intakeSpeedEntry.getDouble(0.0))*(multiplier)*(0.8));
     //}
   }
-
   
   public void togglePistons(){
     if(intakeSolenoid.get() == Value.kForward){
@@ -43,7 +50,14 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeSolenoid.set(Value.kForward);
     }
   }
+
+  public void pushPistonsOut(){
+    intakeSolenoid.set(Value.kForward);
+  }
   
+  public void pistonsNeutral(){
+    intakeSolenoid.set(Value.kOff);
+  }
 
   @Override
   public void periodic() {

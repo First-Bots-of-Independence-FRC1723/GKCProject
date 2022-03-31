@@ -22,6 +22,7 @@ public class ToggleElevatorPistonsCommand extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("toggle elevator piston");
     elevatorSubsystem.togglePistons();
   }
 }

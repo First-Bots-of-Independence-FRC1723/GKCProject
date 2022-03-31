@@ -19,8 +19,8 @@ public class DriveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public AnalogGyro gyro;
-    public static ShuffleboardTab swerveTab = Shuffleboard.getTab("swerve");
 
+    public static ShuffleboardTab swerveTab = Shuffleboard.getTab("swerve");
     private static NetworkTableEntry mod0Can;
     private static NetworkTableEntry mod1Can;
     private static NetworkTableEntry mod2Can;
@@ -33,6 +33,12 @@ public class DriveSubsystem extends SubsystemBase {
     private static NetworkTableEntry mod1Vel;
     private static NetworkTableEntry mod2Vel;
     private static NetworkTableEntry mod3Vel;
+    private static NetworkTableEntry mod0Drive;
+    private static NetworkTableEntry mod1Drive;
+    private static NetworkTableEntry mod2Drive;
+    private static NetworkTableEntry mod3Drive;
+
+    private static NetworkTableEntry gyroAngle;
 
     public DriveSubsystem() {
         gyro = new AnalogGyro(0);
@@ -102,20 +108,27 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     private void setUpShuffleboard(){
-        mod0Can = swerveTab.add("Mod 0 Cancoder Angle", mSwerveMods[0].getCanCoder().getDegrees()).getEntry();
-        mod1Can = swerveTab.add("Mod 1 Cancoder Angle", mSwerveMods[1].getCanCoder().getDegrees()).getEntry();
-        mod2Can = swerveTab.add("Mod 2 Cancoder Angle", mSwerveMods[2].getCanCoder().getDegrees()).getEntry();
-        mod3Can = swerveTab.add("Mod 3 Cancoder Angle", mSwerveMods[3].getCanCoder().getDegrees()).getEntry();
+        mod0Can = swerveTab.add("Mod 0 Cancoder Angle", mSwerveMods[0].getCanCoder().getDegrees()).withSize(2, 1).withPosition(5, 1).getEntry();
+        mod1Can = swerveTab.add("Mod 1 Cancoder Angle", mSwerveMods[1].getCanCoder().getDegrees()).withSize(2, 1).withPosition(7, 1).getEntry();
+        mod2Can = swerveTab.add("Mod 2 Cancoder Angle", mSwerveMods[2].getCanCoder().getDegrees()).withSize(2, 1).withPosition(9, 1).getEntry();
+        mod3Can = swerveTab.add("Mod 3 Cancoder Angle", mSwerveMods[3].getCanCoder().getDegrees()).withSize(2, 1).withPosition(11, 1).getEntry();
     
-        mod0Int = swerveTab.add("Mod 0 Integrated Angle", mSwerveMods[0].getState().angle.getDegrees()).getEntry();
-        mod1Int = swerveTab.add("Mod 1 Integrated Angle", mSwerveMods[1].getState().angle.getDegrees()).getEntry();
-        mod2Int = swerveTab.add("Mod 2 Integrated Angle", mSwerveMods[2].getState().angle.getDegrees()).getEntry();
-        mod3Int = swerveTab.add("Mod 3 Integrated Angle", mSwerveMods[3].getState().angle.getDegrees()).getEntry();
+        mod0Int = swerveTab.add("Mod 0 Integrated Angle", mSwerveMods[0].getState().angle.getDegrees()).withSize(2, 1).withPosition(5, 2).getEntry();
+        mod1Int = swerveTab.add("Mod 1 Integrated Angle", mSwerveMods[1].getState().angle.getDegrees()).withSize(2, 1).withPosition(7, 2).getEntry();
+        mod2Int = swerveTab.add("Mod 2 Integrated Angle", mSwerveMods[2].getState().angle.getDegrees()).withSize(2, 1).withPosition(9, 2).getEntry();
+        mod3Int = swerveTab.add("Mod 3 Integrated Angle", mSwerveMods[3].getState().angle.getDegrees()).withSize(2, 1).withPosition(11, 2).getEntry();
     
-        mod0Vel = swerveTab.add("Mod 0 Velocity", mSwerveMods[0].getState().speedMetersPerSecond).getEntry();
-        mod1Vel = swerveTab.add("Mod 1 Velocity", mSwerveMods[1].getState().speedMetersPerSecond).getEntry();
-        mod2Vel = swerveTab.add("Mod 2 Velocity", mSwerveMods[2].getState().speedMetersPerSecond).getEntry();
-        mod3Vel = swerveTab.add("Mod 3 Velocity", mSwerveMods[3].getState().speedMetersPerSecond).getEntry();
+        mod0Vel = swerveTab.add("Mod 0 Velocity", mSwerveMods[0].getState().speedMetersPerSecond).withSize(2, 1).withPosition(5, 3).getEntry();
+        mod1Vel = swerveTab.add("Mod 1 Velocity", mSwerveMods[1].getState().speedMetersPerSecond).withSize(2, 1).withPosition(7, 3).getEntry();
+        mod2Vel = swerveTab.add("Mod 2 Velocity", mSwerveMods[2].getState().speedMetersPerSecond).withSize(2, 1).withPosition(9, 3).getEntry();
+        mod3Vel = swerveTab.add("Mod 3 Velocity", mSwerveMods[3].getState().speedMetersPerSecond).withSize(2, 1).withPosition(11, 3).getEntry();
+
+        mod0Drive = swerveTab.add("Mod 0 Drive", mSwerveMods[0].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(5, 4).getEntry();
+        mod1Drive = swerveTab.add("Mod 1 Drive", mSwerveMods[1].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(7, 4).getEntry();
+        mod2Drive = swerveTab.add("Mod 2 Drive", mSwerveMods[2].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(9, 4).getEntry();
+        mod3Drive = swerveTab.add("Mod 3 Drive", mSwerveMods[3].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(11, 4).getEntry();
+
+        gyroAngle = swerveTab.add("gyro angle", getYaw().getDegrees()).withSize(2, 2).withPosition(1, 2).getEntry();
     }
 
     private void updateShuffleboard(){
@@ -133,9 +146,14 @@ public class DriveSubsystem extends SubsystemBase {
         mod1Vel.setNumber(mSwerveMods[1].getState().speedMetersPerSecond);
         mod2Vel.setNumber(mSwerveMods[2].getState().speedMetersPerSecond);
         mod3Vel.setNumber(mSwerveMods[3].getState().speedMetersPerSecond);
-    }
 
-    
+        mod0Drive.setNumber(mSwerveMods[0].mDriveMotor.getSelectedSensorPosition());
+        mod1Drive.setNumber(mSwerveMods[1].mDriveMotor.getSelectedSensorPosition());
+        mod2Drive.setNumber(mSwerveMods[2].mDriveMotor.getSelectedSensorPosition());
+        mod3Drive.setNumber(mSwerveMods[3].mDriveMotor.getSelectedSensorPosition());
+
+        gyroAngle.setNumber(getYaw().getDegrees());
+    }
 
     @Override
     public void periodic(){
