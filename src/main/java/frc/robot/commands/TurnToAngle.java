@@ -38,9 +38,9 @@ public class TurnToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(driveSubsystem.getYaw().getDegrees() <= angle+tolerance && driveSubsystem.getYaw().getDegrees() >= angle){
+    if(driveSubsystem.getYaw().getDegrees() >= angle+tolerance){
       driveSubsystem.drive(new Translation2d(0, 0), 1, false, false);
-    } else if(driveSubsystem.getYaw().getDegrees() >= angle-tolerance && driveSubsystem.getYaw().getDegrees() <= angle){
+    } else if(driveSubsystem.getYaw().getDegrees() <= angle-tolerance){
       driveSubsystem.drive(new Translation2d(0, 0), -1, false, false);
     }
   }
