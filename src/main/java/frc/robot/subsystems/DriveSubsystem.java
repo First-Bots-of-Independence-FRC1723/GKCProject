@@ -19,6 +19,7 @@ public class DriveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public AnalogGyro gyro;
+    private long counter;
 
     public static ShuffleboardTab swerveTab = Shuffleboard.getTab("swerve");
     private static NetworkTableEntry mod0Can;
@@ -29,14 +30,14 @@ public class DriveSubsystem extends SubsystemBase {
     private static NetworkTableEntry mod1Int;
     private static NetworkTableEntry mod2Int;
     private static NetworkTableEntry mod3Int;
-    private static NetworkTableEntry mod0Vel;
+    /* private static NetworkTableEntry mod0Vel;
     private static NetworkTableEntry mod1Vel;
     private static NetworkTableEntry mod2Vel;
     private static NetworkTableEntry mod3Vel;
     private static NetworkTableEntry mod0Drive;
     private static NetworkTableEntry mod1Drive;
     private static NetworkTableEntry mod2Drive;
-    private static NetworkTableEntry mod3Drive;
+    private static NetworkTableEntry mod3Drive; */
 
     private static NetworkTableEntry gyroAngle;
 
@@ -118,7 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
         mod2Int = swerveTab.add("Mod 2 Integrated Angle", mSwerveMods[2].getState().angle.getDegrees()).withSize(2, 1).withPosition(9, 2).getEntry();
         mod3Int = swerveTab.add("Mod 3 Integrated Angle", mSwerveMods[3].getState().angle.getDegrees()).withSize(2, 1).withPosition(11, 2).getEntry();
     
-        mod0Vel = swerveTab.add("Mod 0 Velocity", mSwerveMods[0].getState().speedMetersPerSecond).withSize(2, 1).withPosition(5, 3).getEntry();
+        /* mod0Vel = swerveTab.add("Mod 0 Velocity", mSwerveMods[0].getState().speedMetersPerSecond).withSize(2, 1).withPosition(5, 3).getEntry();
         mod1Vel = swerveTab.add("Mod 1 Velocity", mSwerveMods[1].getState().speedMetersPerSecond).withSize(2, 1).withPosition(7, 3).getEntry();
         mod2Vel = swerveTab.add("Mod 2 Velocity", mSwerveMods[2].getState().speedMetersPerSecond).withSize(2, 1).withPosition(9, 3).getEntry();
         mod3Vel = swerveTab.add("Mod 3 Velocity", mSwerveMods[3].getState().speedMetersPerSecond).withSize(2, 1).withPosition(11, 3).getEntry();
@@ -126,7 +127,7 @@ public class DriveSubsystem extends SubsystemBase {
         mod0Drive = swerveTab.add("Mod 0 Drive", mSwerveMods[0].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(5, 4).getEntry();
         mod1Drive = swerveTab.add("Mod 1 Drive", mSwerveMods[1].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(7, 4).getEntry();
         mod2Drive = swerveTab.add("Mod 2 Drive", mSwerveMods[2].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(9, 4).getEntry();
-        mod3Drive = swerveTab.add("Mod 3 Drive", mSwerveMods[3].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(11, 4).getEntry();
+        mod3Drive = swerveTab.add("Mod 3 Drive", mSwerveMods[3].mDriveMotor.getSelectedSensorPosition()).withSize(2, 1).withPosition(11, 4).getEntry(); */
 
         gyroAngle = swerveTab.add("gyro angle", getYaw().getDegrees()).withSize(2, 2).withPosition(1, 2).getEntry();
     }
@@ -142,7 +143,7 @@ public class DriveSubsystem extends SubsystemBase {
         mod2Int.setNumber(mSwerveMods[2].getState().angle.getDegrees());
         mod3Int.setNumber(mSwerveMods[3].getState().angle.getDegrees());
 
-        mod0Vel.setNumber(mSwerveMods[0].getState().speedMetersPerSecond);
+        /* mod0Vel.setNumber(mSwerveMods[0].getState().speedMetersPerSecond);
         mod1Vel.setNumber(mSwerveMods[1].getState().speedMetersPerSecond);
         mod2Vel.setNumber(mSwerveMods[2].getState().speedMetersPerSecond);
         mod3Vel.setNumber(mSwerveMods[3].getState().speedMetersPerSecond);
@@ -150,7 +151,7 @@ public class DriveSubsystem extends SubsystemBase {
         mod0Drive.setNumber(mSwerveMods[0].mDriveMotor.getSelectedSensorPosition());
         mod1Drive.setNumber(mSwerveMods[1].mDriveMotor.getSelectedSensorPosition());
         mod2Drive.setNumber(mSwerveMods[2].mDriveMotor.getSelectedSensorPosition());
-        mod3Drive.setNumber(mSwerveMods[3].mDriveMotor.getSelectedSensorPosition());
+        mod3Drive.setNumber(mSwerveMods[3].mDriveMotor.getSelectedSensorPosition()); */
 
         gyroAngle.setNumber(getYaw().getDegrees());
     }
@@ -158,6 +159,8 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getStates());
-        updateShuffleboard();
+        if(counter++ % 25 == 0){
+            updateShuffleboard();
+        }
     }
 }

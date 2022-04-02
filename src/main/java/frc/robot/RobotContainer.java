@@ -21,7 +21,6 @@ import frc.robot.commands.SpoolLeftCommand;
 import frc.robot.commands.SpoolRightCommand;
 import frc.robot.commands.ToggleIntakePistonsCommand;
 import frc.robot.commands.TransportCommand;
-import frc.robot.commands.VariableShooterCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -64,7 +63,6 @@ public class RobotContainer {
     boolean fieldRelative = false;
     boolean openLoop = false;
     driveSubsystem.setDefaultCommand(new DriveCommand(driveSubsystem, driveController, verticalAxis, horizontalAxis, rotationalAxis, rightTriggerAxis, leftTriggerAxis, fieldRelative, openLoop));
-    shooterSubsystem.setDefaultCommand(new VariableShooterCommand(shooterSubsystem, systemsController));
     configureButtonBindings();
   }
 

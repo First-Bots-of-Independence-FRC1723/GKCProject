@@ -39,9 +39,9 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() {
     if(driveSubsystem.getYaw().getDegrees() >= angle+tolerance){
-      driveSubsystem.drive(new Translation2d(0, 0), 1, false, false);
+      driveSubsystem.drive(new Translation2d(0, 0), 2, false, false);
     } else if(driveSubsystem.getYaw().getDegrees() <= angle-tolerance){
-      driveSubsystem.drive(new Translation2d(0, 0), -1, false, false);
+      driveSubsystem.drive(new Translation2d(0, 0), -2, false, false);
     }
   }
 

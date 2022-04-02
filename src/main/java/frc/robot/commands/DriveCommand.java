@@ -51,10 +51,6 @@ public class DriveCommand extends CommandBase {
     double xAxis = -controller.getRawAxis(strafeAxis);
     double rAxis = -controller.getRawAxis(rotationAxis);
 
-    yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
-    xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
-    rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
-
     if(Math.abs(controller.getRawAxis(rightTriggerAxis)) > 0.7){
       yAxis = -controller.getRawAxis(translationAxis);
       xAxis = -controller.getRawAxis(strafeAxis);
@@ -68,6 +64,10 @@ public class DriveCommand extends CommandBase {
       xAxis = -controller.getRawAxis(strafeAxis)*0.5;
       rAxis = -controller.getRawAxis(rotationAxis)*0.5;
     }
+
+    yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
+    xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
+    rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
 
     translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed);
     rotation = rAxis * Constants.Swerve.maxAngularVelocity;

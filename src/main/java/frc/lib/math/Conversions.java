@@ -76,7 +76,7 @@ public class Conversions {
      */
     public static double metersToFalcon(double meters){
         double wheelRotations = meters/Constants.Swerve.wheelCircumference;
-        double motorRotations = wheelRotations/Constants.Swerve.driveGearRatio;
+        double motorRotations = wheelRotations*Constants.Swerve.driveGearRatio;
         return motorRotations*2048;
     }
 
@@ -86,7 +86,7 @@ public class Conversions {
      */
     public static double falconToMeters(double falconCounts){
         double motorRotations = falconCounts/2048;
-        double wheelRotations = motorRotations*Constants.Swerve.driveGearRatio;
+        double wheelRotations = motorRotations/Constants.Swerve.driveGearRatio;
         return wheelRotations*Constants.Swerve.wheelCircumference;
     }
 }
