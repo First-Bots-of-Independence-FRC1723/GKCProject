@@ -98,8 +98,8 @@ public final class Constants {
         public static final double anglePeakCurrentDuration = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveContinuousCurrentLimit = 35;
-        public static final int drivePeakCurrentLimit = 60;
+        public static final int driveContinuousCurrentLimit = 25;
+        public static final int drivePeakCurrentLimit = 50;
         public static final double drivePeakCurrentDuration = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
@@ -168,10 +168,10 @@ public final class Constants {
 
         // Back Right Module - Module 3 
         public static final class Mod3 {
-            public static final int driveMotorID = 11;
-            public static final int angleMotorID = 10;
+            public static final int driveMotorID = 24;
+            public static final int angleMotorID = 26;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 42;
+            public static final double angleOffset = 350;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }      

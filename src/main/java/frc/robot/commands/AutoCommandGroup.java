@@ -23,7 +23,18 @@ public class AutoCommandGroup extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    if(Robot.autoNumber.getDouble(-1738) == 1){
+    addCommands(
+      new ShootCommand(shooterSubsystem, true, 3),
+      new ParallelCommandGroup(
+        new TransportCommand(transportSubsystem, true, 2),
+        new ShootCommand(shooterSubsystem, true, 2)
+      ),
+      new WaitTimeCommand(1),
+      // new DirectionalDriveCommand(driveSubsystem, new Translation2d(-0.4, 0.1), 1),
+      new DriveDistanceCommand(driveSubsystem, new Translation2d(-0.4, 0), 3, 6)
+      );
+
+    /* if(Robot.autoNumber.getDouble(-1738) == 1){
       addCommands(
         new ShootCommand(shooterSubsystem, true, 3),
         new ParallelCommandGroup(
@@ -55,7 +66,14 @@ public class AutoCommandGroup extends SequentialCommandGroup {
       );
     } else if(Robot.autoNumber.getDouble(-1738) == 2){
       addCommands(
-        
+        new ShootCommand(shooterSubsystem, true, 3),
+        new ParallelCommandGroup(
+          new TransportCommand(transportSubsystem, true, 2),
+          new ShootCommand(shooterSubsystem, true, 2)
+        ),
+        new WaitTimeCommand(1),
+        // new DirectionalDriveCommand(driveSubsystem, new Translation2d(-0.4, 0.1), 1),
+        new DriveDistanceCommand(driveSubsystem, new Translation2d(-0.4, 0.2), 1, 2)
         );
     } else if(Robot.autoNumber.getDouble(-1738) == 3){
       addCommands(
@@ -94,7 +112,7 @@ public class AutoCommandGroup extends SequentialCommandGroup {
         
         );
     }
-    System.out.println(Robot.autoNumber.getDouble(-1738));
+    System.out.println(Robot.autoNumber.getDouble(-1738)); */
 
   }
 }

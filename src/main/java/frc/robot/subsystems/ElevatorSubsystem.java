@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ShuffleboardTab elevatorTab = Shuffleboard.getTab("elevator");
   private NetworkTableEntry elevatorSpeedEntry = elevatorTab.add("elevator speed", 0.8)
   .withWidget(BuiltInWidgets.kNumberSlider)
-  .withProperties(Map.of("min", 0, "max", 1))
+  .withProperties(Map.of("min", -1, "max", 1))
   .getEntry();
 
   private NetworkTableEntry elevatorAngleSpeedEntry = elevatorTab.add("elevator angle speed", 0.3)
@@ -95,6 +95,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public void angleMotorSimple(double multiplier){
     angleMotorLeft.set(VictorSPXControlMode.PercentOutput, (elevatorAngleSpeedEntry.getDouble(0.0))*(multiplier)*(0.8));
+    angleMotorRight.set(VictorSPXControlMode.PercentOutput, (elevatorAngleSpeedEntry.getDouble(0.0))*(multiplier)*(-0.8));
+  }
+
+  public void angleLeft(double multiplier){
+    angleMotorLeft.set(VictorSPXControlMode.PercentOutput, (elevatorAngleSpeedEntry.getDouble(0.0))*(multiplier)*(0.8));
+  }
+
+  public void angleRight(double multiplier){
     angleMotorRight.set(VictorSPXControlMode.PercentOutput, (elevatorAngleSpeedEntry.getDouble(0.0))*(multiplier)*(-0.8));
   }
 

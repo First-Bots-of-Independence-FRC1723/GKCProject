@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,22 +20,30 @@ public class DriveCommand extends CommandBase {
   
   private DriveSubsystem driveSubsystem;
   private XboxController controller;
-  private int translationAxis;
-  private int strafeAxis;
+  private int translationYAxis;
+  private int translationXAxis;
   private int rotationAxis;
   private int rightTriggerAxis;
   private int leftTriggerAxis;
 
-  public DriveCommand(DriveSubsystem driveSubsystem, XboxController controller, int translationAxis, int strafeAxis, int rotationAxis, int rightTriggerAxis, int leftTriggerAxis, boolean fieldRelative, boolean openLoop) {
+  private SlewRateLimiter translationXLimiter;
+  private SlewRateLimiter translationYLimiter;
+  private SlewRateLimiter rotationLimiter;
+
+  public DriveCommand(DriveSubsystem driveSubsystem, XboxController controller, int translationYAxis, int translationXAxis, int rotationAxis, int rightTriggerAxis, int leftTriggerAxis, boolean fieldRelative, boolean openLoop) {
     this.driveSubsystem = driveSubsystem;
     this.controller = controller;
-    this.translationAxis = translationAxis;
-    this.strafeAxis = strafeAxis;
+    this.translationYAxis = translationYAxis;
+    this.translationXAxis = translationXAxis;
     this.rotationAxis = rotationAxis;
     this.rightTriggerAxis = rightTriggerAxis;
     this.leftTriggerAxis = leftTriggerAxis;
     this.fieldRelative = fieldRelative;
     this.openLoop = openLoop;
+
+    translationYLimiter = new SlewRateLimiter(4);
+    translationXLimiter = new SlewRateLimiter(4);
+    rotationLimiter = new SlewRateLimiter(4);
 
     addRequirements(driveSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,21 +56,25 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double yAxis = -controller.getRawAxis(translationAxis);
-    double xAxis = -controller.getRawAxis(strafeAxis);
-    double rAxis = -controller.getRawAxis(rotationAxis);
+    double yAxis = translationYLimiter.calculate(-controller.getRawAxis(translationYAxis));
+    double xAxis = translationXLimiter.calculate(-controller.getRawAxis(translationXAxis));
+    double rAxis = rotationLimiter.calculate(-controller.getRawAxis(rotationAxis));
+
+    /* double yAxis = -controller.getRawAxis(translationYAxis);
+    double xAxis = -controller.getRawAxis(translationXAxis);
+    double rAxis = -controller.getRawAxis(rotationAxis); */
 
     if(Math.abs(controller.getRawAxis(rightTriggerAxis)) > 0.7){
-      yAxis = -controller.getRawAxis(translationAxis);
-      xAxis = -controller.getRawAxis(strafeAxis);
+      yAxis = -controller.getRawAxis(translationYAxis);
+      xAxis = -controller.getRawAxis(translationXAxis);
       rAxis = -controller.getRawAxis(rotationAxis);
     } else if(Math.abs(controller.getRawAxis(leftTriggerAxis)) > 0.7){
-      yAxis = -controller.getRawAxis(translationAxis)*0.1;
-      xAxis = -controller.getRawAxis(strafeAxis)*0.1;
+      yAxis = -controller.getRawAxis(translationYAxis)*0.1;
+      xAxis = -controller.getRawAxis(translationXAxis)*0.1;
       rAxis = -controller.getRawAxis(rotationAxis)*0.1;
     } else{
-      yAxis = -controller.getRawAxis(translationAxis)*0.5;
-      xAxis = -controller.getRawAxis(strafeAxis)*0.5;
+      yAxis = -controller.getRawAxis(translationYAxis)*0.5;
+      xAxis = -controller.getRawAxis(translationXAxis)*0.5;
       rAxis = -controller.getRawAxis(rotationAxis)*0.5;
     }
 

@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
 
     ////// 
 
-    autoNumber = autoTab.add("auto number", -1).getEntry();
+    autoNumber = autoTab.add("auto number", 2).getEntry();
   }
 
   private void setEntries(){

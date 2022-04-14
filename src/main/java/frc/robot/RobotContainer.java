@@ -15,6 +15,8 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.OuttakeCommandGroup;
 import frc.robot.commands.SetIntakePistonsNeutral;
 import frc.robot.commands.AngleArmsCommand;
+import frc.robot.commands.AngleLeftArmCommand;
+import frc.robot.commands.AngleRightArmCommand;
 import frc.robot.commands.AutoCommandGroup;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SpoolLeftCommand;
@@ -29,6 +31,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -77,8 +80,15 @@ public class RobotContainer {
     new JoystickButton(driveController, Button.kBack.value).whenHeld(new ElevatorCommand(elevatorSubsystem, false));
     new JoystickButton(driveController, Button.kLeftBumper.value).whenHeld(new AngleArmsCommand(elevatorSubsystem, true));
     new JoystickButton(driveController, Button.kRightBumper.value).whenHeld(new AngleArmsCommand(elevatorSubsystem, false));
-    new JoystickButton(driveController, Button.kB.value).whenHeld(new SpoolRightCommand(elevatorSubsystem, false));
-    new JoystickButton(driveController, Button.kX.value).whenHeld(new SpoolLeftCommand(elevatorSubsystem, false));
+    new POVButton(driveController, 0).whenHeld(new SpoolLeftCommand(elevatorSubsystem, true));
+    new POVButton(driveController, 180).whenHeld(new SpoolLeftCommand(elevatorSubsystem, false));
+    new POVButton(driveController, 90).whenHeld(new AngleLeftArmCommand(elevatorSubsystem, true));
+    new POVButton(driveController, 270).whenHeld(new AngleLeftArmCommand(elevatorSubsystem, false));
+    new JoystickButton(driveController, Button.kY.value).whenHeld(new SpoolRightCommand(elevatorSubsystem, true));
+    new JoystickButton(driveController, Button.kA.value).whenHeld(new SpoolRightCommand(elevatorSubsystem, false));
+    new JoystickButton(driveController, Button.kB.value).whenHeld(new AngleRightArmCommand(elevatorSubsystem, true));
+    new JoystickButton(driveController, Button.kX.value).whenHeld(new AngleRightArmCommand(elevatorSubsystem, false));
+
     /* 
     new JoystickButton(driveController, Button.kY.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(0.15, 0), 0));
     new JoystickButton(driveController, Button.kB.value).whenHeld(new DirectionalDriveCommand(driveSubsystem, new Translation2d(0, 0.15), 0));

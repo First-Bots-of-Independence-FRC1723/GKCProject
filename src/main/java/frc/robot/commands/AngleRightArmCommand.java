@@ -7,14 +7,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class SpoolRightCommand extends CommandBase {
-  /** Creates a new SpoolLeftCommand. */
+public class AngleRightArmCommand extends CommandBase {
+  /** Creates a new AngleLeftArmCommand. */
   ElevatorSubsystem elevatorSubsystem;
-  boolean up;
+  boolean forward;
 
-  public SpoolRightCommand(ElevatorSubsystem elevatorSubsystem, boolean up) {
+  public AngleRightArmCommand(ElevatorSubsystem elevatorSubsystem, boolean forward) {
     this.elevatorSubsystem = elevatorSubsystem;
-    this.up = up;
+    this.forward = forward;
 
     addRequirements(elevatorSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,24 +22,22 @@ public class SpoolRightCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    System.out.println("spool right");
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(up){
-      elevatorSubsystem.spoolRight(1);
+    if(forward){
+      elevatorSubsystem.angleRight(1);
     } else{
-      elevatorSubsystem.spoolRight(-1);
+      elevatorSubsystem.angleRight(-1);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevatorSubsystem.spool(0);
+    elevatorSubsystem.angleRight(0);
   }
 
   // Returns true when the command should end.
